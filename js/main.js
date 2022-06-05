@@ -88,6 +88,9 @@ changeSignal.click(() => {
 });
 
 const calculate = () => {
+  if (!number1 || !number2) {
+    return;
+  }
   number1 = parseFloat(number1);
   number2 = parseFloat(number2);
   let result;
@@ -110,3 +113,5 @@ const calculate = () => {
     operation = null;
   }
 };
+// VINICIUS SANTANA DOS ANJOS 00209374
+// LUCAS EDUARDO DE OLIVEIRA
