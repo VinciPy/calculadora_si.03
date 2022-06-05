@@ -3,6 +3,7 @@ let number1 = "";
 let number2 = "";
 let buttonCalculate = $(".calculate");
 const screen = $(".calc-screen");
+const changeSignal = $(".change-signal");
 
 const listenersOfButtonsNumbers = () => {
   let buttonsNumbers = $(".btn.number");
@@ -18,6 +19,9 @@ const listenersOfButtonsNumbers = () => {
     });
   });
 };
+ 
+
+
 
 const listenersOfOperations = () => {
   let operations = $(".btn.operation");
@@ -44,10 +48,14 @@ listenersOfButtonsNumbers();
 buttonCalculate.click(() => {
   number1 = parseFloat(number1);
   number2 = parseFloat(number2);
+  let result;
   if (operation == "x") {
     operation = "*";
   }
-  let result = eval(`${number1} ${operation} ${number2}`);
+  if (operation == "%"){
+     result = eval(`(${number1} / 100) * ${number2}`); 
+  } else{
+   result = eval(`${number1} ${operation} ${number2}`);}
   refreshScreen(result);
   result = parseFloat(result);
   number1 = result;
@@ -71,3 +79,20 @@ $(".float").click(() => {
   number1 = number1 + ".";
   refreshScreen(number1);
 });
+
+changeSignal.click(() => {
+  if(operation) {
+     if(number2 >= 0){
+      number2 = "-" + number2;
+     }else{
+       number2 = number2.replace('-', '');
+     } 
+     refreshScreen(number2);
+  }else{
+    if(number1 >= 0){
+      number1 = "-" + number1;
+     }else{
+       number1 = number1.replace('-', '');
+     }
+  }refreshScreen(number1);
+} )
