@@ -25,7 +25,6 @@ const listenersOfButtonsNumbers = () => {
 
 const listenersOfOperations = () => {
   let operations = $(".btn.operation");
-  console.log(operations);
   operations.each((index, element) => {
     element.addEventListener("click", () => {
       if (number1 && number2) {
