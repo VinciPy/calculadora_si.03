@@ -19,14 +19,23 @@ const listenersOfButtonsNumbers = () => {
     });
   });
 };
- 
 
-
+const clear = () => {
+  number1 = "";
+  number2 = "";
+  operation = "";
+  refreshScreen("");
+};
 
 const listenersOfOperations = () => {
   let operations = $(".btn.operation");
   operations.each((index, element) => {
     element.addEventListener("click", () => {
+      if (!number1) {
+        clear();
+        refreshScreen("NÃO PERMITIDO");
+        return;
+      }
       if (number1 && number2) {
         calculate();
       }
@@ -45,29 +54,10 @@ listenersOfOperations();
 listenersOfButtonsNumbers();
 
 buttonCalculate.click(() => {
-  number1 = parseFloat(number1);
-  number2 = parseFloat(number2);
-  let result;
-  if (operation == "x") {
-    operation = "*";
-  }
-  if (operation == "%"){
-     result = eval(`(${number1} / 100) * ${number2}`); 
-  } else{
-   result = eval(`${number1} ${operation} ${number2}`);}
-  refreshScreen(result);
-  result = parseFloat(result);
-  number1 = result;
-  number2 = "";
-  operation = null;
+  calculate();
 });
 
-$(".clear").click(() => {
-  number1 = "";
-  number2 = "";
-  operation = "";
-  refreshScreen("");
-});
+$(".clear").click(() => {});
 
 $(".float").click(() => {
   if (operation) {
@@ -80,18 +70,43 @@ $(".float").click(() => {
 });
 
 changeSignal.click(() => {
-  if(operation) {
-     if(number2 >= 0){
+  if (operation) {
+    if (number2 >= 0) {
       number2 = "-" + number2;
-     }else{
-       number2 = number2.replace('-', '');
-     } 
-     refreshScreen(number2);
-  }else{
-    if(number1 >= 0){
+    } else {
+      number2 = number2.replace("-", "");
+    }
+    refreshScreen(number2);
+  } else {
+    if (number1 >= 0) {
       number1 = "-" + number1;
-     }else{
-       number1 = number1.replace('-', '');
-     }
-  }refreshScreen(number1);
-} )
+    } else {
+      number1 = number1.replace("-", "");
+    }
+  }
+  refreshScreen(number1);
+});
+
+const calculate = () => {
+  number1 = parseFloat(number1);
+  number2 = parseFloat(number2);
+  let result;
+  if (operation == "x") {
+    operation = "*";
+  }
+  if (operation == "%") {
+    result = eval(`(${number1} / 100) * ${number2}`);
+  } else {
+    result = eval(`${number1} ${operation} ${number2}`);
+  }
+  if (isNaN(result) || typeof result != "number" || !isFinite(result)) {
+    clear();
+    refreshScreen("OPERAÇÃO INVÁLIDA");
+  } else {
+    refreshScreen(result);
+    result = parseFloat(result);
+    number1 = result;
+    number2 = "";
+    operation = null;
+  }
+};
